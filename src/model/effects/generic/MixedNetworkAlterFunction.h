@@ -40,6 +40,7 @@ protected:
 	inline const Network * pFirstNetwork() const;
 	inline const Network * pSecondNetwork() const;
 	inline TwoNetworkCache * pTwoNetworkCache() const;
+	inline TwoNetworkCache * pTwoNetworkCacheReversed() const;
 	inline NetworkCache * pFirstNetworkCache() const;
 
 private:
@@ -48,6 +49,7 @@ private:
 	const Network * lpFirstNetwork;
 	const Network * lpSecondNetwork;
 	TwoNetworkCache * lpTwoNetworkCache;
+	TwoNetworkCache * lpTwoNetworkCacheReversed;
 	NetworkCache * lpFirstNetworkCache;
 };
 
@@ -69,6 +71,11 @@ const Network * MixedNetworkAlterFunction::pSecondNetwork() const
 TwoNetworkCache * MixedNetworkAlterFunction::pTwoNetworkCache() const
 {
 	return this->lpTwoNetworkCache;
+}
+
+TwoNetworkCache * MixedNetworkAlterFunction::pTwoNetworkCacheReversed() const
+{
+  return this->lpTwoNetworkCacheReversed;
 }
 
 NetworkCache * MixedNetworkAlterFunction::pFirstNetworkCache() const

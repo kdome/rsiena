@@ -21,6 +21,8 @@
 #include "model/variables/NetworkVariable.h"
 #include "data/NetworkLongitudinalData.h"
 #include "data/Data.h"
+#include "model/tables/TwoNetworkCache.h"
+#include "model/tables/MixedEgocentricConfigurationTable.h"
 
 using namespace std;
 
@@ -31,7 +33,8 @@ namespace siena
  * Constructor.
  */
 MixedThreeCyclesFunction::MixedThreeCyclesFunction(string firstNetworkName,
-							string secondNetworkName, double parameter) :
+							string secondNetworkName, double parameter,
+							int type, bool opposite) :
 				MixedNetworkAlterFunction(firstNetworkName, secondNetworkName)
 {
 	this->lsqrtTable = SqrtTable::instance();
@@ -39,6 +42,12 @@ MixedThreeCyclesFunction::MixedThreeCyclesFunction(string firstNetworkName,
 	this->lcenter = (parameter >= 3);
 	this->lpFirstInStarTable = 0;
 	this->lvariableName = firstNetworkName;
+	// four pointers added by CS+KM
+	// note that the first network is the interaction, the second network is the dependent network
+	this->lpFirstSecondInStarTable = 0;
+	this->lpSecondFirstInStarTable = 0;
+	this->ltype = type;
+	this->lopposite = opposite;
 }
 
 /**
@@ -54,7 +63,11 @@ void MixedThreeCyclesFunction::initialize(const Data * pData,
 	Cache * pCache)
 {
 	MixedNetworkAlterFunction::initialize(pData, pState, period, pCache);
-	this->lpFirstInStarTable = this->pFirstNetworkCache()->pInStarTable();
+	this->lpFirstInStarTable = this->pFirstNetworkCache()->pInStarTable();	
+	// added by K+C
+	this->lpFirstSecondInStarTable = this->pTwoNetworkCache()->pInStarTable();
+	this->lpSecondFirstInStarTable = this->pTwoNetworkCacheReversed()->pInStarTable();
+	//
 	NetworkLongitudinalData * pNetworkData =
 		pData->pNetworkData(this->lvariableName);
 	if (!pNetworkData)
@@ -87,27 +100,77 @@ void MixedThreeCyclesFunction::initialize(const Data * pData,
  */
 double MixedThreeCyclesFunction::value(int alter)
 {
-	double statistic = 0;
-	const Network * pSecondNetwork = this->pSecondNetwork();
-
-	for (IncidentTieIterator iter = pSecondNetwork->inTies(alter);
-		iter.valid();
-		iter.next())
-	{
-		if (iter.actor() != this->ego())
-		{
-			if (this->lroot)
-			{
-				statistic +=
-		(this->lsqrtTable->sqrt(this->lpFirstInStarTable->get(iter.actor())) -
-							this->lavInTwoStar);
-			}
-			else
-			{
-				statistic +=
-		(this->lpFirstInStarTable->get(iter.actor()) - this->lavInTwoStar);
-			}
-		}
+  double statistic = 0;
+  const Network * pSecondNetwork = this->pSecondNetwork();
+  const Network * pFirstNetwork = this->pFirstNetwork();
+  
+  if (!lopposite){
+    for (IncidentTieIterator iter = pSecondNetwork->inTies(alter);
+         iter.valid();
+         iter.next())
+    {
+      if (iter.actor() != this->ego())
+      {
+        if (this->lroot)
+        {
+          statistic +=
+            (this->lsqrtTable->sqrt(this->lpFirstInStarTable->get(iter.actor())) -
+            this->lavInTwoStar);
+        }
+        else
+        {
+          statistic +=
+            (this->lpFirstInStarTable->get(iter.actor()) - this->lavInTwoStar);
+        }
+      }
+    }
+  }
+	
+	// added by Kieran and Christoph for opposition-type four cycles 
+	// i (W) -> h (X) <- k (W) -> j (type = 1) 
+	// i (X) -> h (W) <- k (W) -> j (type = 2)
+	if (lopposite){
+	  for (IncidentTieIterator iter = pFirstNetwork->inTies(alter);
+        iter.valid();
+        iter.next())
+	  {
+	    if (iter.actor() != this->ego())
+	    {
+	      // if(this->lroot) 
+	      // {
+	      // 	// ignore square root parameter and centering
+	      // 	if(this->ltype == 2)
+	      // 		statistic += (this->lsqrtTable->sqrt(this->lpFirstSecondInStarTable->get(iter.actor())) - this->lavInTwoStar);
+	      // 	if(this->ltype == 1)
+	      // 		// subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
+	      // 		statistic += (this->lsqrtTable->sqrt(this->lpSecondFirstInStarTable->get(iter.actor()) - 1) - this->lavInTwoStar);
+	      // }
+	      // else 
+	      // {
+	      //	// ignore square root parameter and centering
+	      //	if(this->ltype == 2)
+	      //		statistic += (this->lpFirstSecondInStarTable->get(iter.actor()) - this->lavInTwoStar);
+	      //	if(this->ltype == 1)
+	      //		// subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
+	      //		statistic += (this->lpSecondFirstInStarTable->get(iter.actor()) - 1 - this->lavInTwoStar);	
+	      // }
+	      // ignore square root parameter and centering
+	      if(this->ltype == 2)
+	        statistic += (this->lpFirstSecondInStarTable->get(iter.actor()));
+	      if(this->ltype == 1)
+	        // subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
+	        statistic += (this->lpSecondFirstInStarTable->get(iter.actor()) - 1);	
+	    }
+	  }
+	  // double counting, so divide by two (note that sharedTo also double counts 4-cycles)
+	  statistic = (statistic/2);
+	  if(this->lroot) 
+	  {
+	    statistic = (sqrt(statistic));
+	  }
+	  
+	  
+	  
 	}
 	return statistic;
 }
