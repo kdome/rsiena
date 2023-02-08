@@ -1259,6 +1259,21 @@ Effect * EffectFactory::createEffect(const EffectInfo * pEffectInfo) const
 							pEffectInfo->variableName(),
 							pEffectInfo->internalEffectParameter()));
 	}
+	else if (effectName == "oppCycle4.1")
+	{
+	  pEffect = new GenericNetworkEffect(pEffectInfo,
+                                      new MixedThreeCyclesFunction(pEffectInfo->interactionName1(),
+                                                                   pEffectInfo->variableName(),
+                                                                   pEffectInfo->internalEffectParameter(),
+                                                                   1, true));
+	}
+	else if (effectName == "oppCycle4.2")
+	{
+	  pEffect = new GenericNetworkEffect(pEffectInfo,
+                                      new MixedThreeCyclesFunction(pEffectInfo->interactionName1(),
+                                                                   pEffectInfo->variableName(),
+                                                                   pEffectInfo->internalEffectParameter(),
+                                                                   2, true));
 	else if (effectName == "inPopIntnX")
 	{
 		string networkName = pEffectInfo->interactionName1();
@@ -2415,6 +2430,22 @@ Effect * EffectFactory::createEffect(const EffectInfo * pEffectInfo) const
 				covariateName, true, false);
 		pEffect = new GenericNetworkEffect(pEffectInfo,
 			pChangeFunction, pStatisticFunction);
+	}	
+	else if (effectName == "toDiff")
+	{
+	  pEffect = new GenericNetworkEffect(pEffectInfo,
+                                      new MixedTwoStepFunction(pEffectInfo->interactionName1(),
+                                                               pEffectInfo->interactionName2(),
+                                                               FORWARD, FORWARD, (pEffectInfo->internalEffectParameter()>=2) 
+                                      ));
+	}
+	else if (effectName == "fromDiff")
+	{
+	  pEffect = new GenericNetworkEffect(pEffectInfo,
+                                      new MixedTwoStepFunction(pEffectInfo->interactionName1(),
+                                                               pEffectInfo->interactionName2(),
+                                                               FORWARD, BACKWARD, (pEffectInfo->internalEffectParameter()>=2) 
+                                      ));
 	}
 	else if (effectName == "intercept")
 	{

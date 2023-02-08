@@ -29,6 +29,7 @@ MixedNetworkAlterFunction::MixedNetworkAlterFunction(string firstNetworkName,
 	this->lpFirstNetwork = 0;
 	this->lpSecondNetwork = 0;
 	this->lpTwoNetworkCache = 0;
+	this->lpTwoNetworkCacheReversed = 0; //added for oppCycle4 effects (CS+KM)
 	this->lpFirstNetworkCache = 0;
 }
 
@@ -53,6 +54,8 @@ void MixedNetworkAlterFunction::initialize(const Data * pData,
 	this->lpSecondNetwork = pState->pNetwork(this->lsecondNetworkName);
 	this->lpTwoNetworkCache = pCache->pTwoNetworkCache(this->lpFirstNetwork,
 		this->lpSecondNetwork);
+	this->lpTwoNetworkCacheReversed = pCache->pTwoNetworkCache(this->lpSecondNetwork,
+                                                            this->lpFirstNetwork); //added for oppCycle4 effects (CS+KM)
 	this->lpFirstNetworkCache = pCache->pNetworkCache(this->lpFirstNetwork);
 }
 

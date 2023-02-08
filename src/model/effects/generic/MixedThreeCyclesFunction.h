@@ -23,6 +23,8 @@ namespace siena
 
 class SqrtTable;
 class ConfigurationTable;
+// added KM+CS
+class MixedConfigurationTable;
 
 // ----------------------------------------------------------------------------
 // Section: MixedThreeCyclesFunction class
@@ -35,7 +37,9 @@ class MixedThreeCyclesFunction : public MixedNetworkAlterFunction
 {
 public:
 	MixedThreeCyclesFunction(std::string firstNetworkName,
-			std::string secondNetworkName, double parameter);
+			std::string secondNetworkName, double parameter,
+			// added K+C
+			int type = 1, bool opposite = false);
 
 	virtual void initialize(const Data * pData,
 		State * pState, int period, Cache * pCache);
@@ -48,6 +52,11 @@ private:
 	double lavInTwoStar; // average observed number of in-two-stars in first network
 	std::string lvariableName; // name of first network
 	ConfigurationTable * lpFirstInStarTable;
+	// New tables added by Kieran and Christoph
+	MixedConfigurationTable * lpFirstSecondInStarTable;
+	MixedConfigurationTable * lpSecondFirstInStarTable;
+	bool lopposite;
+	int ltype;
 	// Lookup table for fast square root calculations:
 	SqrtTable * lsqrtTable;
 };
