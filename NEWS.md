@@ -1,3 +1,149 @@
+# RSiena 1.3.19
+
+## 
+   
+2023-02-07
+
+## Changes in RSiena:  
+### Coding:
+  * `siena07internals.cpp` adapted to be compatible with new clang 16 C++ 
+    compiler (thanks to Brian Ripley).
+### New effects:
+  * New effect `inPop_dya`.
+  * Parameter 2 for `sameXInPop` and `diffXInPop`.
+### Corrections:
+  * Help page for `siena07` corrected with respect to `x$lessMem`.
+### Improvements of functionality:
+  * `coCovar` and `varCovar` now can handle variables with only one 
+    non-missing value, but will stop with an error message 
+    if all values are missing.
+
+
+# RSiena 1.3.18
+
+## 
+   
+2023-01-29
+
+## Changes in RSiena:  
+### Improvements of functionality:
+  * Additional step type `move` for MH proposal distribution
+    for likelihood estimation (thanks to Charlotte Greenan).
+  * Accordingly, parameters changed that are used in `sienaAlgorithmCreate`
+   for probabilities of MH steps, now summarized in `prML`; with a new default.
+  * List elements `accepts`, `rejects`, `aborts` for `sienaFit` objects
+    produced by ML estimation improved/corrected by reorganizing them in C++.
+  * List element ac3 added to `sienaFit` object if `maxlike`.
+
+# RSiena 1.3.17
+
+## 
+   
+2023-01-06
+
+## Changes in RSiena:  
+
+### Improvements of functionality:
+  * `sienaGOF` now accepts simulated auxiliary statistics containing missing
+    values. If there are any, this will be reported with a warning
+    if `giveNAWarning` is `TRUE`.
+  * `sienaDataCreate` now also accepts, as "...", a list of such objects.
+
+# RSiena 1.3.16
+
+## 
+   
+2023-01-02
+
+## Changes in RSiena:  
+
+### Corrections:
+
+### Effects:
+    `inPopIntnX`, `inActIntnX`, `outPopIntnX`, `outActIntnX`, `sameXInPopIntn`, 
+    `sameXOutPopIntn`, `sameXInActIntn`, `sameXOutActIntn` restored
+    (these had got lost in some way...).
+### Updates:
+  * All occurrences of `http` in `R` and `Rd` files changed to `https`.
+  * `seq_len` used and superfluous c() omitted in various R files.
+
+# RSiena 1.3.15
+
+## 
+   
+2022-11-27
+
+## Changes in RSiena:  
+
+### Corrections:
+  * `siena08`: correct p-value `pTsq` for overall test statistic `Tsq`
+  * `print.summary.sienaMeta`, `siena07`, `print01Report`: drop RForge revision.
+  * Correct "objname" to "projname" in `meta.table` (`siena08.r`).
+  * Simplify LaTeX output of `meta.table`. 
+  * `seq_along` and `seq_len` used in `print01Report`. 
+
+# RSiena 1.3.14
+
+## 
+   
+2022-11-04
+
+## Changes in RSiena:  
+
+### Note:
+  * CRAN version.
+
+### Corrections:
+  * Update `configure` and  `configure.ac` (with help from Brian Ripley). 
+
+# RSiena 1.3.13
+
+## 
+   
+2022-10-07
+
+## Changes in RSiena:  
+
+### Updates:
+  * Replacements in EffectFactory.cpp of single | operator by ||.
+
+# RSiena 1.3.12
+
+## 
+   
+2022-10-06
+
+## Changes in RSiena:  
+
+### Updates:
+  * Changes to comply with new version of `Matrix` package.
+  * Replacements in some C++ functions of single & and | operators by && and ||.
+### Corrections:  
+  * `universalOffset` initialized as 0; it was earlier initialized as
+    the maximum real number (`NetworkLongitudinalData.cpp`). 
+  * `thetaStore` deleted (was trash in `phase2.r`).
+  * Various comparisons for vectors with 0 changed to using `all`
+    to avoid warnings (`initializeFRAN.r`).
+### Code modifications:
+  * `sigmas` and `meansigmas` added to `sienaRI` object.
+  * Print of standard deviations in the `sienaRI` object for `printSigma=TRUE` 
+    changed to using averages at the variance level.
+  * If `returnThetas` in the call of `siena07`, also simulated estimation statistics
+    during Phase 2 (deviations from targets) are returned.
+### Effects:
+  * Several new effects related to primary setting:
+    `nonPCompress`, `primCompress`, `primary`, `primDegAct`,
+    `primDegActDiff`, `primDegActDiffSqrt`, `primDegActSqrt`,
+    `primDegActLog`, `primDegActInv`.
+  * `gwdspFB` effect added for two-mode networks.
+  * New effects `outAct_ego`, `inAct_ego`,`reciAct_ego`, `toAny`.
+  * For effects `to`, `toBack`, `toRecip`, `mixedInXW`, 
+    internal effect parameter 3 now specifies truncation of the number of 
+    twosteps (change to `MixedTwoStepFunction`). 
+### Improvements of documentation:
+  * Modified help page for `sienaRI`.
+  * Small modifications of help page for `sienaGOF`.
+
 # RSiena 1.3.11
 
 ## 
@@ -64,7 +210,7 @@
 ## Changes in RSiena:  
 
 ### Effects:
-  * Changed internal effect parameter for `simAllNear` to 2 and for
+  * Changed default internal effect parameter for `simAllNear` to 2 and for
     `simAllFar` to 4.
 
 ### Improvements of functionality: 
