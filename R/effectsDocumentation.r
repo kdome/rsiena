@@ -72,6 +72,7 @@ effectsDocumentation <- function(effects= NULL, type="html",
 				"nonSymmetricBipartiteObjective",
 				"covarNetNetObjective",
 				"tripleNetworkObjective",
+				"tripleBipOneBipObjective",							   
 				"dyadANetNetObjective",
 				"settingsObjective",
 

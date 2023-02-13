@@ -1123,6 +1123,23 @@ getEffects<- function(x, nintn = 10, behNintn=4, getDocumentation=FALSE, onePeri
 									groupName=groupName, group=group,
 									netType=netType))
 					}
+				  # if j is one mode and k is two mode, then create tripleBipOneBip effects
+				  if(types[j] == 'oneMode' && types[k] == 'bipartite'){
+				    # check that the node sets of the two-mode networks match
+				    # TODO check whether the other node sets match, if that is necessary
+				    if (attr(xx$depvars[[k]], 'nodeSet')[2] == nodeSets[2])
+				    {
+				      thirdName <- names(xx$depvars)[k]
+				      objEffects <-
+				        rbind(objEffects,
+				              createEffects("tripleBipOneBipObjective",
+				                            xName = otherName, #onemode 
+				                            yName = thirdName, #twomode
+				                            name=varname,
+				                            groupName=groupName, group=group,
+				                            netType=netType))
+				    }
+				  }		  
 				}
 			}
 		}

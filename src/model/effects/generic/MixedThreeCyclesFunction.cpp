@@ -136,41 +136,25 @@ double MixedThreeCyclesFunction::value(int alter)
 	  {
 	    if (iter.actor() != this->ego())
 	    {
-	      // if(this->lroot) 
-	      // {
-	      // 	// ignore square root parameter and centering
-	      // 	if(this->ltype == 2)
-	      // 		statistic += (this->lsqrtTable->sqrt(this->lpFirstSecondInStarTable->get(iter.actor())) - this->lavInTwoStar);
-	      // 	if(this->ltype == 1)
-	      // 		// subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
-	      // 		statistic += (this->lsqrtTable->sqrt(this->lpSecondFirstInStarTable->get(iter.actor()) - 1) - this->lavInTwoStar);
-	      // }
-	      // else 
-	      // {
-	      //	// ignore square root parameter and centering
-	      //	if(this->ltype == 2)
-	      //		statistic += (this->lpFirstSecondInStarTable->get(iter.actor()) - this->lavInTwoStar);
-	      //	if(this->ltype == 1)
-	      //		// subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
-	      //		statistic += (this->lpSecondFirstInStarTable->get(iter.actor()) - 1 - this->lavInTwoStar);	
-	      // }
-	      // ignore square root parameter and centering
-	      if(this->ltype == 2)
-	        statistic += (this->lpFirstSecondInStarTable->get(iter.actor()));
-	      if(this->ltype == 1)
-	        // subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
-	        statistic += (this->lpSecondFirstInStarTable->get(iter.actor()) - 1);	
+	       if(this->lroot) 
+	       {
+	       	if(this->ltype == 2)
+	       		statistic += (this->lsqrtTable->sqrt(this->lpFirstSecondInStarTable->get(iter.actor())));
+	       	if(this->ltype == 1)
+	       		// subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
+	       		statistic += (this->lsqrtTable->sqrt(this->lpSecondFirstInStarTable->get(iter.actor()) - 1));
+	       
+	       }
+	       else 
+	       {
+	          if(this->ltype == 2)
+	            statistic += (this->lpFirstSecondInStarTable->get(iter.actor()));
+	          if(this->ltype == 1)
+	            // subtracting one, since otherwise the count includes the twopath the dependent tie is involved in!
+	            statistic += (this->lpSecondFirstInStarTable->get(iter.actor()) - 1);		
+	       }
 	    }
 	  }
-	  // double counting, so divide by two (note that sharedTo also double counts 4-cycles)
-	  statistic = (statistic/2);
-	  if(this->lroot) 
-	  {
-	    statistic = (sqrt(statistic));
-	  }
-	  
-	  
-	  
 	}
 	return statistic;
 }

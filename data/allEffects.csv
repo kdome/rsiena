@@ -588,8 +588,8 @@ bipartiteBipartiteObjective,indegree^(1/#) xxxxxx popularity,sum ind. x centrd i
 bipartiteBipartiteObjective,outdegree^(1/#) xxxxxx activity,sum outd. x centrd outdegree^(1/#) xxxxxx,outActIntn,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,2,objective,NA,NA,0,0,0,0,dyadic,FALSE
 bipartiteBipartiteObjective,duplex xxxxxx outdegree^(1/#) activity,sum dupl. xxxxxx outdeg.^(1/#),doubleOutAct,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,2,objective,NA,NA,0,0,0,0,,FALSE
 bipartiteBipartiteObjective,shared xxxxxx (#) to agreement,"mixed 4cycles WWXX, W = xxxxxx",sharedTo,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,1,objective,NA,NA,0,0,0,0,,FALSE
-bipartiteBipartiteObjective,different xxxxxx (#) to disagreement type 1,"mixed 4cycles XWWX, W = xxxxxx",oppCycle4.1,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,1,objective,NA,NA,0,0,0,0,,FALSE
-bipartiteBipartiteObjective,different xxxxxx (#) to disagreement type 2,"mixed 4cycles WXWX, W = xxxxxx",oppCycle4.2,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,1,objective,NA,NA,0,0,0,0,,FALSE
+bipartiteBipartiteObjective,different xxxxxx (#) to different type 1,"mixed 4cycles XWWX, W = xxxxxx",diffCycle4.1,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,1,objective,NA,NA,0,0,0,0,,FALSE
+bipartiteBipartiteObjective,different xxxxxx (#) to different type 2,"mixed 4cycles WXWX, W = xxxxxx",diffCycle4.2,TRUE,xxxxxx,,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,1,objective,NA,NA,0,0,0,0,,FALSE
 covarNetNetObjective,xxxxxx closure jumping yyyyyy,"m.tr. W->W=>X, W = xxxxxx, jump yyyyyy",jumpWWClosure,TRUE,xxxxxx,yyyyyy,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,0,objective,NA,NA,0,0,0,0,dyadic,FALSE
 covarNetNetObjective,from xxxxxx agr. jump. yyyyyy,"m.tr. XWW, W = xxxxxx, jump yyyyyy",jumpFrom,TRUE,xxxxxx,yyyyyy,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,0,objective,NA,NA,0,0,0,0,dyadic,FALSE
 covarNetNetObjective,shared inc. xxxxxx jump. yyyyyy,"inc. m.tr. WWX, W = xxxxxx, jump yyyyyy",jumpSharedIn,TRUE,xxxxxx,yyyyyy,eval,FALSE,FALSE,FALSE,FALSE,FALSE,",",0,0,objective,NA,NA,0,0,0,0,dyadic,FALSE

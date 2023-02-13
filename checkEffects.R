@@ -1302,6 +1302,109 @@ myeff
 ans1$targets
 sum(s502 * sqrt(difff %*% s502)) # OK
 
+################################################################################
+### Check diffCycle4.1 and diffCycle4.2
+################################################################################
+# synthetic bipartite networks
+bip1 <- array(sample(c(0,1), 500, replace = T, prob = c(.75,.25)), dim=c(50,5,2))
+bip2 <- array(sample(c(0,1), 500, replace = T,prob = c(.75,.25)), dim=c(50,5,2))
+
+#bip1[bip2==1] <- 0 # works in the disjoint case
+
+net1 <- sienaNet(bip1,
+                 type = "bipartite",
+                 nodeSet = c("actors","issues"))
+net2 <- sienaNet(bip2,
+                 type = "bipartite",
+                 nodeSet = c("actors","issues"))
+actors <- sienaNodeSet(50, "actors")
+issues <- sienaNodeSet(5, "issues")
+
+mydata <- sienaDataCreate(net1,net2, nodeSets = list(actors,issues))
+myeff <- getEffects(mydata)
+myeff <- includeEffects(myeff,diffCycle4.1,diffCycle4.2,name = "net2",interaction1="net1")
+
+mymodel <- sienaModelCreate(projname = NULL)
+ans<- siena07(mymodel, data=mydata, effects=myeff)
+
+bip2.2 <- bip2[,,2]
+bip1.1 <- bip1[,,1]
+
+# use the time t dependent network and the t-1 indep. network
+twopath.12 <- bip1.1%*%t(bip2.2)
+twopath.21 <- bip2.2%*%t(bip1.1)
+
+diag(twopath.12) <- 
+  diag(twopath.21) <- 0
+sum((twopath.12-1)*twopath.12)  # disagreement with ego 2x netw1, alter 2x netw2 (type 1) 
+sum(twopath.12 * twopath.21) # crossed bipartite choices (type 2)
+
+ans$targets
 
 
+
+#sqrt version
+myeff <- setEffect(myeff,diffCycle4.1,name = "net2",interaction1="net1", parameter =2 )
+myeff <- setEffect(myeff,diffCycle4.2,name = "net2",interaction1="net1", parameter =2 )
+ans<- siena07(mymodel, data=mydata, effects=myeff)
+
+twopath.12_1 <- twopath.12-1
+twopath.12_1[twopath.12_1==-1] <- 0
+sum(sqrt(twopath.12_1)*(twopath.12))  # disagreement with ego 2x netw1, alter 2x netw2 (type 1) 
+sum(sqrt(twopath.12) * twopath.21)
+
+ans$targets 
+
+
+
+################################################################################
+### Check fromDiff and toDiff
+################################################################################
+# synthetic bipartite networks 
+bip1 <- array(sample(c(0,1), 500, replace = T, prob = c(.75,.25)), dim=c(50,5,2))
+bip2 <- array(sample(c(0,1), 500, replace = T,prob = c(.75,.25)), dim=c(50,5,2))
+f <- array(c(s501,s502), dim=c(50,50,2))
+
+net1 <- sienaNet(bip1,
+                 type = "bipartite",
+                 nodeSet = c("actors","issues"))
+net2 <- sienaNet(bip2,
+                 type = "bipartite",
+                 nodeSet = c("actors","issues"))
+fnet <- sienaNet(f,
+                 nodeSet = c("actors"))
+actors <- sienaNodeSet(50, "actors")
+issues <- sienaNodeSet(5, "issues")
+
+mydata <- sienaDataCreate(net1,net2, fnet, nodeSets = list(actors,issues))
+myeff <- getEffects(mydata)
+myeff <- includeEffects(myeff, fromDiff,name = "fnet",interaction1="net1",interaction2="net2")
+myeff <- includeEffects(myeff, toDiff,name = "net1",interaction1="fnet",interaction2="net2")
+
+mymodel <- sienaModelCreate(projname = NULL)
+ans<- siena07(mymodel, data=mydata, effects=myeff)
+
+### fromDiff ###
+
+bip1.1 <- bip1[,,1]
+bip2.1 <- bip2[,,1]
+
+twopath.12 <- bip1.1%*%t(bip2.1)
+
+diag(twopath.12) <- 0
+sum(f[,,2]*twopath.12) 
+
+ans$targets #fnet final effect has target of 48
+
+### toDiff ###
+
+bip1.2 <- bip1[,,2] # dv, so take t
+bip2.1 <- bip2[,,1]
+
+twopath.12 <- bip1.2%*%t(bip2.1)
+
+diag(twopath.12) <- 0
+sum(f[,,1]*twopath.12) 
+
+ans$targets #net1 third effect has target of 38
 
